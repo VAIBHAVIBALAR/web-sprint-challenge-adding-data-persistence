@@ -9,10 +9,10 @@ function getTask() {
 
 async function createTask(task) {
     const newTasks = await db('tasks').insert(task)
-    .then(([newTask]) => {
-    return db('tasks').where('task_id', newTask).first()
+        .then(([newTask]) => {
+             return db('tasks').where('task_id', newTask).first()
     })
-    return newTasks
+            return newTasks
 }
 
 

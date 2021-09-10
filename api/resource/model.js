@@ -7,10 +7,10 @@ async function getResources() {
 
 async function createResource(resource) {
     const newResource = await db('resources').insert(resource)
-    .then(([newResource]) => {
-    return db('resources').where('resource_id', newResource).first()
-    })
-    return newResource
+        .then(([newResource]) => {
+            return db('resources').where('resource_id', newResource).first()
+        })
+        return newResource
 }
 
 module.exports = { getResources, createResource}
