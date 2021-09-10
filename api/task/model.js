@@ -2,12 +2,18 @@
 const db = require('../../data/dbConfig')
 
 function getTask() {
-    return db('tasks')
+    return db('tasks as ta')
+    .leftJoin('projects as pr', 'ta.project_id', 'pr.project_id')
+    .select('ta.task_notes', 'ta.task_description', 'ta.task_completed', 'pr.project_name', 'pr.project_description')
 }
 
-function createTask(task) {
-    const [task_id] = db('tasks').insert(task)
-    return getTask().where({ task_id})
+async function createTask(task) {
+    const newTasks = await db('tasks').insert(task)
+    .then(([newTask]) => {
+    return db('tasks').where('task_id', newTask).first()
+    })
+    return newTasks
 }
+
 
 module.exports = { getTask, createTask}

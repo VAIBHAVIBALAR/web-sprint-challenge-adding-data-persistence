@@ -3,12 +3,14 @@ const db = require('../../data/dbConfig')
 
 function getProject() {
     return db('projects as pr')
-    .select('pr.project_name', 'pr.project_description', 'pr.project_completed')
 }
 
-function createProject(project) {
-    const [project_id] = db('projects').insert(project)
-    return getProject().where({ project_id})
+async function createProject(project) {
+    const newProject = await db('projects').insert(project)
+    .then(([newData]) => {
+    return db('projects').where('project_id', newData).first()
+    })
+    return newProject
 }
 
 module.exports = { getProject, createProject}
